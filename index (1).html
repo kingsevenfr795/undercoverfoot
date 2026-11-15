@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050806">
+<title>Foot Undercover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#050806;--pitch:#0c6b35;--deep:#08381c;--neon:#4dff3d;--white:#f6f8f4;--mut:#8fa596;--red:#ff5468;
+--disp:"Barlow Condensed","Arial Narrow",Impact,sans-serif;--body:"Barlow",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--ink);color:var(--white);font:16px/1.4 var(--body)}
+#app{min-height:100dvh;max-width:480px;margin:auto;display:flex;flex-direction:column;gap:14px;
+padding:calc(16px + env(safe-area-inset-top)) 18px calc(22px + env(safe-area-inset-bottom));
+background:radial-gradient(circle at 50% 108%,transparent 128px,rgba(255,255,255,.07) 129px,rgba(255,255,255,.07) 131px,transparent 132px),
+radial-gradient(ellipse at 50% -10%,rgba(12,107,53,.6),transparent 65%)}
+h1,h2,.big,.btn,.pn,.who,.num{font-family:var(--disp);font-style:italic;font-weight:800;text-transform:uppercase;line-height:.95}
+h1{font-size:clamp(56px,20vw,88px)}
+h2{font-size:34px}
+.sub{color:var(--mut)}
+.head{display:flex;flex-direction:column;gap:6px;margin-bottom:4px}
+.top{display:flex;justify-content:space-between;align-items:center;min-height:32px}
+.lnk{background:none;border:0;color:var(--mut);font:600 15px var(--body);padding:6px 0;cursor:pointer}
+.btn{font-size:22px;padding:17px;border-radius:14px;border:0;background:var(--neon);color:#04210a;width:100%;cursor:pointer;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--white);border:2px solid rgba(255,255,255,.25)}
+.btn.red{background:var(--red);color:#2a0007}
+.btn:disabled{opacity:.3;pointer-events:none}
+:focus-visible{outline:3px solid var(--neon);outline-offset:2px}
+.stack{display:flex;flex-direction:column;gap:10px}
+.hero{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:30px 0}
+.hero h1 span{color:var(--neon)}
+.row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border-radius:12px;padding:10px 12px}
+.row input{flex:1;min-width:0;background:none;border:0;color:var(--white);font:600 17px var(--body)}
+.row input:focus{outline:none}
+.row .rk{font:italic 800 22px var(--disp);width:28px;color:var(--neon)}
+.row .nm{flex:1}.row .pt{font:italic 800 26px var(--disp);color:var(--neon)}
+.x{background:none;border:0;color:var(--mut);font-size:22px;width:34px;height:34px;cursor:pointer}
+.x:disabled{opacity:.2}
+.step{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.06);border-radius:12px;padding:10px 12px}
+.step div{display:flex;align-items:center;gap:14px}
+.step button{width:40px;height:40px;border-radius:50%;border:2px solid var(--neon);background:none;color:var(--neon);font-size:22px;cursor:pointer}
+.step button:disabled{opacity:.25}
+.step b{font:italic 800 30px var(--disp);min-width:22px;text-align:center}
+.seg{display:flex;gap:6px}.seg button{flex:1;padding:12px 4px;border-radius:12px;border:2px solid rgba(255,255,255,.2);background:none;color:var(--white);font:italic 800 19px var(--disp);text-transform:uppercase;cursor:pointer}.seg .on{background:var(--neon);color:#04210a;border-color:var(--neon)}
+.sum{font-weight:600}.err{color:var(--red);font-weight:600;min-height:22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pc{aspect-ratio:3/4;border-radius:16px;border:2px solid rgba(255,255,255,.75);cursor:pointer;color:var(--white);
+background:linear-gradient(165deg,var(--pitch),var(--deep));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:8px;position:relative}
+.pc::after{content:"";position:absolute;inset:8px;border:1px solid rgba(255,255,255,.3);border-radius:10px}
+.pc.seen{opacity:.3}.pn{font-size:28px;word-break:break-word;text-align:center}.q{font:italic 800 34px var(--disp);color:var(--neon)}
+.ov{position:fixed;inset:0;background:rgba(5,8,6,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:20px;z-index:10}
+.who{font-size:30px;color:var(--mut)}
+.flip{width:min(76vw,310px);aspect-ratio:3/4;perspective:1000px}
+.fi{position:relative;width:100%;height:100%;transition:transform .85s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.on .fi{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:18px}
+.back{background:linear-gradient(165deg,var(--pitch),var(--deep));border:2px solid #fff;font-size:64px}
+.front{transform:rotateY(180deg);background:var(--neon);color:#04210a}
+.front.white{background:var(--white)}.front.red{background:var(--red);color:#2a0007}
+.big{font-size:clamp(34px,11vw,48px);word-break:break-word}
+.rv{max-width:310px;opacity:0;pointer-events:none;animation:show 0s 1s forwards}
+@keyframes show{to{opacity:1;pointer-events:auto}}
+.ord{list-style:none;display:flex;flex-direction:column;gap:8px}
+.ord li{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.06);border-radius:12px;padding:12px 14px;font:600 19px var(--body)}
+.ord i{font:italic 800 28px var(--disp);color:var(--neon);width:30px}
+.center{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:14px}
+.num{font-size:clamp(52px,17vw,76px);color:var(--neon);word-break:break-word}
+.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.chips span{padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.08);color:var(--mut);font-size:14px}
+.chips .d{opacity:.4}.chips .c{background:var(--neon);color:#04210a;font-weight:600}
+.opt{width:100%;text-align:left;padding:15px;border-radius:12px;border:2px solid rgba(255,255,255,.2);background:none;color:var(--white);font:600 18px var(--body);cursor:pointer}
+.opt.s{border-color:var(--neon);background:rgba(77,255,61,.15)}
+.bar{height:10px;border-radius:5px;background:var(--neon);min-width:4px;transition:width .6s}
+.tl{flex:1}.tl div{display:flex;justify-content:space-between;font-weight:600}
+.gain{color:var(--neon);font:italic 800 22px var(--disp)}
+.tag{font-size:13px;color:var(--mut)}
+.txt{background:rgba(255,255,255,.06);border-radius:12px;padding:14px;color:#dfe8e0}
+.txt b{color:var(--neon)}.txt p+p{margin-top:8px}
+input.gi{width:100%;padding:16px;border-radius:12px;border:2px solid var(--neon);background:none;color:var(--white);font:600 20px var(--body);text-align:center}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation-duration:.01s!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ====== BIBLIOTHÈQUE DE DUOS : un duo par ligne, "Joueur 1|Joueur 2" ====== */
+const DB={
+facile:`Vinícius Júnior|Jude Bellingham
+Mohamed Salah|Sadio Mané
+Harry Kane|Robert Lewandowski
+Gianluigi Donnarumma|Mike Maignan
+Virgil van Dijk|Rúben Dias
+Aurélien Tchouaméni|Eduardo Camavinga
+Pedri|Gavi
+Harry Kane|Son Heung-min
+Kevin De Bruyne|Romelu Lukaku
+Désiré Doué|Khvicha Kvaratskhelia
+Antoine Griezmann|Olivier Giroud
+Alisson Becker|Ederson
+Thibaut Courtois|Marc-André ter Stegen
+William Saliba|Gabriel Magalhães
+Dayot Upamecano|Ibrahima Konaté
+Jules Koundé|Benjamin Pavard
+Lucas Hernández|Theo Hernández
+Nuno Mendes|Achraf Hakimi
+Joshua Kimmich|Rodri
+Phil Foden|Bukayo Saka
+Bruno Fernandes|Bernardo Silva
+Florian Wirtz|Jamal Musiala
+Lautaro Martínez|Julián Álvarez
+Edinson Cavani|Luis Suarez
+Rayan Cherki|Bradley Barcola
+Marcus Thuram|Randal Kolo Muani
+Vitinha|João Neves
+Raphinha|Rodrygo`,
+moyen:`Marquinhos|Éder Militão
+Andrew Robertson|Trent Alexander-Arnold
+Sergio Ramos|Pepe
+Declan Rice|Moisés Caicedo
+Alexis Mac Allister|Enzo Fernández
+Alexander Isak|Viktor Gyökeres
+Jordan Pickford|Emiliano Martínez
+Antonio Rüdiger|Jonathan Tah
+Cristian Romero|Lisandro Martínez
+Willian Pacho|Marquinhos
+Kyle Walker|Reece James
+Leon Goretzka|Joshua Kimmich
+Frenkie de Jong|Ryan Gravenberch
+Martin Ødegaard|Dominik Szoboszlai
+Fabián Ruiz|Warren Zaïre-Emery
+Marco Reus|Julian Brandt
+Gabriel Jesus|Richarlison
+Leroy Sané|Serge Gnabry
+Kai Havertz|Timo Werner
+Marcus Rashford|Anthony Gordon
+Cole Palmer|James Maddison
+Federico Valverde|Rodrigo Bentancur
+Harry Maguire|Marc Guéhi
+İlkay Gündoğan|Emre Can
+Xavi Simons|Cody Gakpo
+Jorginho|Thomas Partey
+Eberechi Eze|Michael Olise
+Ben White|Jurriën Timber`,
+difficile:`Alessandro Bastoni|Nicolò Barella
+Hakan Çalhanoğlu|Henrikh Mkhitaryan
+Ollie Watkins|Ivan Toney
+Hugo Ekitike|Jean-Philippe Mateta
+Gabriel Martinelli|Leandro Trossard
+Endrick|Rodrygo
+David Raya|Unai Simón
+Lucas Chevalier|Brice Samba
+Aymeric Laporte|Robin Le Normand
+Alphonso Davies|Jonathan David
+Federico Dimarco|Denzel Dumfries
+Martín Zubimendi|Mikel Merino
+Arda Güler|Kenan Yıldız
+Dani Olmo|Fermín López
+Khéphren Thuram|Manu Koné
+Geoffrey Kondogbia|Pierre-Emile Højbjerg
+Bryan Mbeumo|Yoane Wissa
+Matheus Cunha|João Pedro
+Mason Greenwood|Amine Gouiri
+Georges Mikautadze|Alexandre Lacazette
+Gregor Kobel|Yann Sommer
+Joan Garcia|Wojciech Szczęsny
+Pau Cubarsí|Dean Huijsen
+Leonardo Balerdi|Chancel Mbemba
+Alejandro Grimaldo|Alejandro Balde
+Jeremie Frimpong|Milos Kerkez
+Maghnes Akliouche|Eliesse Ben Seghir
+Curtis Jones|Harvey Elliott
+Franco Mastantuono|Nico Paz`};
+const DUOS={};for(const k in DB)DUOS[k]=DB[k].split("\n").map(l=>l.trim()).filter(Boolean).map(l=>l.split("|").map(x=>x.trim()));
+/* ====== PARAMÈTRES ====== */
+const MIN_P=3,MAX_P=20,KEY="foot-undercover-v1";
+
+/* ====== ALÉATOIRE (crypto, sans biais) ====== */
+function rint(n){const a=new Uint32Array(1),lim=Math.floor(4294967296/n)*n;let x;do{crypto.getRandomValues(a);x=a[0]}while(x>=lim);return x%n}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=rint(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+
+/* ====== ÉTAT & STOCKAGE ====== */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const saved=(()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}})();
+const S={screen:"home",g:null,scores:saved.scores||{},
+settings:Object.assign({players:["Joueur 1","Joueur 2","Joueur 3","Joueur 4"],uc:1,mw:0,diff:"moyen"},saved.settings||{})};
+if(!DUOS[S.settings.diff])S.settings.diff="moyen";
+if(!Array.isArray(S.settings.players)||S.settings.players.length<MIN_P)S.settings.players=["Joueur 1","Joueur 2","Joueur 3","Joueur 4"];
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({settings:S.settings,scores:S.scores}))}catch(e){}};
+const maxSpec=n=>Math.floor((n-1)/2);
+function info(){const{players:p,uc,mw}=S.settings,n=p.length,nm=p.map(x=>x.trim().toLowerCase()),civ=n-uc-mw;let msg="";
+if(nm.some(x=>!x))msg="Chaque participant doit avoir un prénom.";
+else if(new Set(nm).size<n)msg="Deux participants ont le même prénom.";
+else if(uc+mw<1)msg="Choisis au moins un rôle spécial.";
+else if(civ<=uc+mw){const m=maxSpec(n);msg=`Trop de rôles spéciaux : maximum ${m} pour ${n} joueurs.`}
+return{n,civ,msg}}
+
+/* ====== MOTEUR DE JEU ====== */
+function newGame(){const{players,uc,mw}=S.settings,pool=DUOS[S.settings.diff],duo=pool[rint(pool.length)],f=rint(2);
+const idx=shuffle(players.map((_,i)=>i)),roles=players.map(()=>"civil");
+idx.slice(0,uc).forEach(i=>roles[i]="uc");idx.slice(uc,uc+mw).forEach(i=>roles[i]="mw");
+S.g={players:players.map((n,i)=>({name:n.trim(),role:roles[i],alive:true,seen:false})),civWord:duo[f],ucWord:duo[1-f],
+round:1,view:null,order:[],out:null,guesser:null,guessOk:null,winner:null,gain:null};
+S.screen="cards"}
+const alive=()=>S.g.players.map((p,i)=>i).filter(i=>S.g.players[i].alive);
+function makeOrder(){const g=S.g,o=shuffle(alive());
+if(o.length>1&&g.players[o[0]].role==="mw"){const c=o.map((_,i)=>i).filter(i=>i>0&&g.players[o[i]].role!=="mw");const j=c[rint(c.length)];[o[0],o[j]]=[o[j],o[0]]}
+return o}
+function eliminate(id){const g=S.g;g.players[id].alive=false;g.out=id;S.screen="elim"}
+function check(){const g=S.g,a=g.players.filter(p=>p.alive),
+c=a.filter(p=>p.role==="civil").length,u=a.filter(p=>p.role==="uc").length,m=a.filter(p=>p.role==="mw").length;
+if(u+m===0)return finish("civ");
+if(c<=u+m)return finish(u>0?"uc":"mw");
+g.round++;g.order=makeOrder();S.screen="play"}
+function finish(w){const g=S.g,gain=g.players.map(()=>0);
+g.players.forEach((p,i)=>{
+if(w==="civ"&&p.role==="civil"&&p.alive)gain[i]++;
+if(w==="uc"&&p.role==="uc")gain[i]++;
+if(w==="mw"&&p.role==="mw"&&(g.guesser!=null?i===g.guesser:p.alive))gain[i]++});
+g.winner=w;g.gain=gain;
+g.players.forEach((p,i)=>{S.scores[p.name]=(S.scores[p.name]||0)+gain[i]});save();S.screen="end"}
+const norm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+function guessOk(txt){const w=norm(S.g.civWord),t=norm(txt);return !!t&&(t===w||w.split(" ").filter(x=>x.length>=3).includes(t))}
+
+/* ====== VUES ====== */
+const head=(t,s)=>`<div class="head"><h2>${t}</h2>${s?`<p class="sub">${s}</p>`:""}</div>`;
+const back=(to,label="← Retour")=>`<div class="top"><button class="lnk" data-a="go" data-to="${to}">${label}</button></div>`;
+const quit=()=>`<div class="top"><button class="lnk" data-a="quit">Quitter la partie</button></div>`;
+const flip=(f,c="")=>`<div class="flip"><div class="fi"><div class="face back">⚽</div><div class="face front ${c}">${f}</div></div></div>`;
+const roleLbl={civil:"Civil",uc:"Undercover",mw:"Mr White"};
+const V={
+home:()=>`<div class="hero"><h1>Foot<br><span>Under</span>cover</h1><p class="sub">Un seul téléphone, des amis, et un joueur que tout le monde doit deviner sans le nommer.</p></div>
+<div class="stack"><button class="btn" data-a="go" data-to="setup">Jouer</button><button class="btn ghost" data-a="go" data-to="scores">Tableau des scores</button><button class="btn ghost" data-a="go" data-to="rules">Règles du jeu</button></div>`,
+
+setup:()=>{const s=S.settings,n=s.players.length;return back("home")+head("Nouvelle partie","Ajoute les participants et choisis les rôles.")+
+`<div class="stack">${s.players.map((p,i)=>`<div class="row"><input data-nm="${i}" value="${esc(p)}" maxlength="16" aria-label="Prénom ${i+1}"><button class="x" data-a="del" data-i="${i}" ${n<=MIN_P?"disabled":""} aria-label="Supprimer">✕</button></div>`).join("")}
+<button class="btn ghost" data-a="add" ${n>=MAX_P?"disabled":""}>+ Ajouter un participant</button></div>
+<div class="stack"><p class="sub">Difficulté</p><div class="seg">${["facile","moyen","difficile"].map(d=>`<button class="${s.diff===d?"on":""}" data-a="diff" data-d="${d}">${d}</button>`).join("")}</div><div class="step"><span>Undercover</span><div><button data-a="uc-">−</button><b>${s.uc}</b><button data-a="uc+">+</button></div></div>
+<div class="step"><span>Mr White</span><div><button data-a="mw-">−</button><b>${s.mw}</b><button data-a="mw+">+</button></div></div></div>
+<div id="sum"></div><button class="btn" id="go" data-a="begin">Distribuer les cartes</button>`},
+
+cards:()=>{const g=S.g,k=g.players.filter(p=>p.seen).length;
+return quit()+head("Distribution",`Chacun son tour : touche ta carte, mémorise, puis cache-la. (${k}/${g.players.length})`)+
+`<div class="grid">${g.players.map((p,i)=>`<button class="pc ${p.seen?"seen":""}" ${p.seen?"disabled":""} data-a="view" data-i="${i}"><span class="pn">${esc(p.name)}</span><span class="q">${p.seen?"Vu":"?"}</span></button>`).join("")}</div>`+
+(k===g.players.length?`<button class="btn" data-a="start">Commencer la partie</button>`:"")+(g.view!=null?overlay():"")},
+
+play:()=>{const g=S.g,n=alive().length;
+return quit()+head("Manche "+g.round,"Ordre de passage. Donnez vos indices à voix haute, puis passez au vote.")+
+`<div class="grid">${g.order.map((id,i)=>`<div class="pc"><span class="q">${i+1}</span><span class="pn">${esc(g.players[id].name)}</span></div>`).join("")}</div>
+<div class="tag" style="text-align:center">${n} joueur${n>1?"s":""} encore en jeu</div>
+<button class="btn" data-a="vote">Passer au vote</button>`},
+
+vote:()=>{const g=S.g;
+return `<div class="top"><button class="lnk" data-a="go" data-to="play">← Retour</button></div>`+head("Qui est éliminé ?","Après le vote à l’oral, touche le joueur éliminé.")+
+`<div class="stack">${g.order.map(id=>`<button class="opt" data-a="out" data-i="${id}">${esc(g.players[id].name)}</button>`).join("")}</div>`},
+
+elim:()=>{const g=S.g,p=g.players[g.out],w=p.role==="civil"?g.civWord:p.role==="uc"?g.ucWord:null;
+return `<div class="center"><p class="who">${esc(p.name)} est éliminé</p>${flip(`<small>Son rôle</small><b class="big">${roleLbl[p.role]}</b>${w?`<small>${esc(w)}</small>`:""}`,p.role==="civil"?"":p.role==="uc"?"red":"white")}</div>
+<button class="btn rv" style="max-width:none" data-a="afterelim">${p.role==="mw"?"Dernière chance":"Continuer"}</button>`},
+
+guess:()=>`<div class="center"><h2>Dernière chance</h2><p class="sub">${esc(S.g.players[S.g.out].name)}, quel est le joueur des civils ?</p>
+<input class="gi" id="gi" autocomplete="off" autocapitalize="words" placeholder="Nom du footballeur"></div><button class="btn" data-a="guess">Valider</button>`,
+
+guessres:()=>{const g=S.g;return `<div class="center"><h2>${g.guessOk?"Bien joué !":"Raté"}</h2><p class="sub">${g.guessOk?"Mr White a trouvé":"Le joueur des civils était"} ${esc(g.civWord)}.</p></div>
+<button class="btn" data-a="afterguess">Continuer</button>`},
+
+end:()=>{const g=S.g,t={civ:"Les civils gagnent",uc:"Les Undercover gagnent",mw:"Mr White gagne"}[g.winner];
+return `<div class="head"><h2>${t}</h2><p class="sub">Civils : ${esc(g.civWord)} · Undercover : ${esc(g.ucWord)}</p></div>
+<div class="stack">${g.players.map((p,i)=>`<div class="row"><span class="nm">${esc(p.name)}<br><span class="tag">${roleLbl[p.role]}${p.alive?"":" · éliminé"}</span></span><span class="gain">${g.gain[i]?"+"+g.gain[i]:""}</span></div>`).join("")}</div>
+<div class="stack"><button class="btn" data-a="again">Rejouer</button><button class="btn ghost" data-a="go" data-to="scores">Scores</button><button class="btn ghost" data-a="go" data-to="home">Accueil</button></div>`},
+
+scores:()=>{const m=Object.assign({},S.scores);S.settings.players.forEach(p=>{const k=p.trim();if(k&&!(k in m))m[k]=0});
+const l=Object.entries(m).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));let rk=0,pv=null;
+return back(S.g&&S.g.winner?"end":"home")+head("Scores","Sauvegardés sur cet appareil.")+
+`<div class="stack">${l.map(([n,p])=>{if(p!==pv){rk=l.findIndex(x=>x[1]===p)+1;pv=p}return `<div class="row"><span class="rk">${rk}</span><span class="nm">${esc(n)}</span><span class="pt">${p}</span></div>`}).join("")}</div>
+<button class="btn ghost red" data-a="reset">Remettre à zéro</button>`},
+
+rules:()=>back("home")+head("Règles du jeu")+`<div class="txt"><p><b>But.</b> Chaque joueur reçoit un footballeur en secret. Les civils ont tous le même, les Undercover en ont un proche. Mr White n’en a aucun.</p>
+<p><b>Difficulté.</b> Facile : des joueurs connus de tous. Moyen : des joueurs bien connus des amateurs. Difficile : des duos pour les vrais passionnés.</p>
+<p><b>Indices et vote.</b> Tout se passe à l’oral : donnez chacun un indice sur votre footballeur sans le nommer, discutez, puis votez ensemble. Touchez « Passer au vote » puis le joueur désigné : il est éliminé et son rôle est révélé.</p>
+<p><b>Mr White.</b> S’il est éliminé, il a une dernière chance de deviner le joueur des civils (nom complet ou nom de famille). Réussi : il gagne.</p>
+<p><b>Victoire.</b> Les civils gagnent quand tous les rôles spéciaux sont éliminés. Les Undercover gagnent s’ils sont aussi nombreux que les civils (ou plus) avec au moins un Undercover en vie. Si seul Mr White reste à égalité, c’est lui qui gagne.</p>
+<p><b>Points.</b> Victoire des civils : 1 point par civil encore en jeu. Victoire des Undercover : 1 point chacun. Mr White : 1 point s’il gagne.</p></div>`
+};
+function overlay(){const g=S.g,p=g.players[g.view],mw=p.role==="mw",w=p.role==="civil"?g.civWord:g.ucWord;
+return `<div class="ov"><p class="who">${esc(p.name)}</p>${flip(mw?`<small>Ton rôle</small><b class="big">Mr White</b><small>Pas de mot. Écoute et improvise.</small>`:`<small>Ton joueur</small><b class="big">${esc(w)}</b>`,mw?"white":"")}<button class="btn rv" data-a="hide">Cacher mon mot</button></div>`}
+
+/* ====== RENDU ====== */
+function render(){document.getElementById("app").innerHTML=V[S.screen]();upd();window.scrollTo(0,0);
+requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll(".flip").forEach(f=>f.classList.add("on"))))}
+function upd(){const el=document.getElementById("sum");if(!el)return;const i=info(),s=S.settings;
+el.innerHTML=`<p class="sum">${i.n} participants · ${i.civ} civils · ${s.uc} Undercover · ${s.mw} Mr White</p><p class="err">${i.msg}</p>`;
+document.getElementById("go").disabled=!!i.msg}
+
+/* ====== ACTIONS ====== */
+const A={
+go:d=>{S.screen=d.to;render()},
+quit:()=>{if(confirm("Quitter la partie en cours ?")){S.g=null;S.screen="home";render()}},
+add:()=>{const s=S.settings;if(s.players.length>=MAX_P)return;let k=s.players.length+1;while(s.players.some(p=>p.trim().toLowerCase()==="joueur "+k))k++;s.players.push("Joueur "+k);save();render()},
+del:d=>{const s=S.settings;if(s.players.length<=MIN_P)return;s.players.splice(+d.i,1);save();render()},
+"uc+":()=>{const s=S.settings;if(s.uc+s.mw<s.players.length-1)s.uc++;save();render()},
+"uc-":()=>{const s=S.settings;if(s.uc>0)s.uc--;save();render()},
+"mw+":()=>{const s=S.settings;if(s.uc+s.mw<s.players.length-1)s.mw++;save();render()},
+"mw-":()=>{const s=S.settings;if(s.mw>0)s.mw--;save();render()},
+begin:()=>{if(info().msg)return;S.settings.players=S.settings.players.map(p=>p.trim());save();newGame();render()},
+diff:d=>{S.settings.diff=d.d;save();render()},
+view:d=>{S.g.view=+d.i;render()},
+hide:()=>{S.g.players[S.g.view].seen=true;S.g.view=null;render()},
+start:()=>{S.g.order=makeOrder();S.screen="play";render()},
+vote:()=>{S.screen="vote";render()},
+out:d=>{eliminate(+d.i);render()},
+afterelim:()=>{S.g.players[S.g.out].role==="mw"?S.screen="guess":check();render()},
+guess:()=>{const g=S.g,ok=guessOk(document.getElementById("gi").value);g.guessOk=ok;if(ok)g.guesser=g.out;S.screen="guessres";render()},
+afterguess:()=>{S.g.guessOk?finish("mw"):check();render()},
+again:()=>{newGame();render()},
+reset:()=>{if(confirm("Remettre tous les scores à zéro ?")){S.scores={};save();render()}}
+};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b&&A[b.dataset.a])A[b.dataset.a](b.dataset)});
+document.addEventListener("input",e=>{const i=e.target.dataset.nm;if(i!==undefined){S.settings.players[+i]=e.target.value;save();upd()}});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="gi")A.guess()});
+render();
+</script>
+</body>
+</html>
